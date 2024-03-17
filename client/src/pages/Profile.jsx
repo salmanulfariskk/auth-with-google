@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import {getStorage,ref, uploadBytesResumable,getDownloadURL} from 'firebase/storage'
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
-import { updateUserStart,updateUserSuccess,updateUserFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure } from "../redux/user/userSlice";
+import { updateUserStart,updateUserSuccess,updateUserFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure,signOut } from "../redux/user/userSlice";
 
 function Profile() {
   const dispatch = useDispatch()
@@ -87,6 +87,15 @@ function Profile() {
       dispatch(deleteUserFailure(error))
     }
   }
+
+  const handleSignout = async  () => {
+    try {
+      await fetch('/api/auth/signout')
+      dispatch(signOut())
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
   return (
     <div className="max-w-lg mx-auto p-3">
@@ -143,7 +152,7 @@ function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span onClick={handleDeleteAccount} className="text-red-600 cursor-pointer">Delete Account</span>
-        <span className="text-red-600 cursor-pointer">Sign Out</span>
+        <span onClick={handleSignout} className="text-red-600 cursor-pointer">Sign Out</span>
       </div>
     </div>
   );
